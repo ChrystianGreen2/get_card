@@ -1,4 +1,9 @@
-# Tutorial sobre Lambda Functions
+# GETICARD
+Codigos referentes ao projeto GETICARD, um cartão virtual de identificação.
+
+
+O backend foi feito utilizando Lambda Functions.
+
 
 ## O que são Lambda Functions?
 
