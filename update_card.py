@@ -32,7 +32,7 @@ class UserData(BaseModel):
     chave_pix: Optional[str]
     lattes: Optional[str]
     instagram: Optional[str]
-    twitter: Optional[str]
+    linkedin: Optional[str]
     facebook: Optional[str]
     github: Optional[str]
     site: Optional[str]
