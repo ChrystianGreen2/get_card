@@ -1,3 +1,9 @@
+# Melhorias
+# Adicionar a Validação de Email no login tambem.
+# Usar o bcrypt para encriptação das senhas
+# Validação da senha com base em alguma regra
+
+
 import json
 import os
 import hashlib
