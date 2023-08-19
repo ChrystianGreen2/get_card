@@ -1,3 +1,9 @@
+# Melhorias recomendadas
+# Tratar exceção caso as variaveis de ambiente  DYNAMODB_TABLE, REGION_NAME e S3_BUCKET não estiverem definidas.
+# O código que lida com a decodificação da imagem e o upload do S3 pode ser movido para uma função separada.
+# Melhorar o tratamento de exceções atual, para permitir mensagens de erro mais detalhadas e significativas.
+# Melhorar a validação dos campos obrigatórios.
+
 import json
 import os
 import re
@@ -17,6 +23,8 @@ dynamodb = boto3.resource('dynamodb', region_name=REGION_NAME)
 table = dynamodb.Table(DYNAMODB_TABLE)
 s3 = boto3.client('s3')
 
+REQUIRED_FIELDS = ['nome', 'email', 'whatsapp', 'card_id']
+
 
 class UserData(BaseModel):
     """
@@ -33,10 +41,11 @@ class UserData(BaseModel):
     chave_pix: Optional[str]
     lattes: Optional[str]
     instagram: Optional[str]
-    twitter: Optional[str]
+    linkedin: Optional[str]
     facebook: Optional[str]
     github: Optional[str]
     site: Optional[str]
+
 
     def validate_email(self, email: str) -> None:
         """
@@ -65,13 +74,13 @@ def lambda_handler(event: dict, context: dict) -> dict:
     """
     try:
         user_data = parse(event['body'], UserData)
-
-        required_fields = ['nome', 'email', 'whatsapp', 'card_id']
-        if not all(field in user_data.dict() for field in required_fields):
-            return {
-                'statusCode': 400,
-                'body': json.dumps('Required user data is missing in the request')
-            }
+        
+        for field in REQUIRED_FIELDS:
+            if getattr(user_data, field) is None:
+                return {
+                    'statusCode': 400,
+                    'body': json.dumps(f'{field} is required')
+                }
 
         if user_data.foto_perfil:
             # Extract base64 image data from Data URI
