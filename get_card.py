@@ -61,7 +61,7 @@ def lambda_handler(event: dict, context: dict) -> dict:
         )
 
         if 'Item' in response:
-            user_data = UserData.parse_obj(response['Item'])
+            user_data = UserData.parse_obj(response['Item']) # Change to parse(response['Item']) if error
             return {
                 'statusCode': 200,
                 'body': json.dumps(user_data.dict())
